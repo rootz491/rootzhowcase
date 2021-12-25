@@ -11,3 +11,8 @@ This is a webapp for showing my projects, with a little twist of stripe api.
 ## current status
 
 designs are in progress.
+
+
+## self note
+
+* react official docs for backend related [topics](https://create-react-app.dev/docs/proxying-api-requests-in-development).
