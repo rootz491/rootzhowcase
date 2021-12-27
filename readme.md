@@ -35,6 +35,31 @@ designs are in progress.
     * post req to `/api/reset/{token}` with **new_password** will reset password.
     * after reset, user will be able to login.
 
+4.  become pro member
+    * user can become pro member by paying **rs. 50** via stripe at `/api/payment`.
+    * after payment, event will be triggered from stripe which will indicate that payment is successful.
+    * [POST] `/api/payment` will listen for this event and then perform action i.e. make user a pro member.
+    * now user will be able to download all of my projects' source code.
+
+## testing
+
+setup dev server
+* run backend server
+```
+cd server
+npm run dev
+```
+
+* start stripe event listener
+```
+stripe listen --forward-to http://localhost:1337/api/payment
+```
+
+* now try making payment or something, it should work 😅.
+
+
 ## self note
 
 * react official docs for backend related [topics](https://create-react-app.dev/docs/proxying-api-requests-in-development).
+* stripe customer docs [here](https://stripe.com/docs/api/customers?lang=node).
+* stripe checkout session docs [here](https://stripe.com/docs/api/checkout/sessions?lang=node).

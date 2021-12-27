@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const { getUserWithPwd, getUser, createUser } = require('../services/user');
 const {sendVerificationMail} = require('./email');
+const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
 // @route POST api/auth/register
 // @desc Register user
@@ -26,8 +27,14 @@ exports.register = async (req, res) => {
         // fetch a random profile avatar (svg)
         const r = await fetch(`https://avatars.dicebear.com/api/human/${username}.svg`)
         const profileImage = await r.text();
+        // create stripe account
+        const customer = await stripe.customers.create({
+            email,
+            description: `${username}'s account`
+        });
+        const stripeId = customer.id;
         // create new user
-        const newUser = await createUser(email, password, username, profileImage);
+        const newUser = await createUser(email, password, username, profileImage, stripeId);
         if (!newUser) { 
             throw {
                 msg: 'User could not be created, try again later',

@@ -8,7 +8,7 @@ const sgMail = require('@sendgrid/mail');
 //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
 // }
 
-module.exports.sendVerificationMail = (email, token) => {
+exports.sendVerificationMail = (email, token) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     const link = `${process.env.HOST}/api/verification/${token}`;
@@ -27,7 +27,7 @@ module.exports.sendVerificationMail = (email, token) => {
         });
 }
 
-module.exports.sendPasswordResetMail = (email, token) => {
+exports.sendPasswordResetMail = (email, token) => {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
     const link = `${process.env.HOST}/api/reset/${token}`;
@@ -36,6 +36,23 @@ module.exports.sendPasswordResetMail = (email, token) => {
         from: process.env.SENDGRID_FROM_EMAIL,
         subject: 'reset your password',
         html: '<h2>welcome to project ROOTZSHOWCASE</h2><p>Hello, this email is sent from <b>rootzhowcase</b> application!</p><strong>Please go to below link to reset your password.</strong><br><a href="' + link + '">' + link + '</a><br><p>Karan Sharma,<br>Thank you!</p>',
+    };
+    sgMail.send(options)
+        .then(res => {
+            console.log('mail sent successfully');
+        })
+        .catch(err => {
+            console.log('error while sending mail: '+err);
+        });
+}
+
+exports.sendProMemberConfirmationMail = (email) => {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const options = {
+        to: email,
+        from: process.env.SENDGRID_FROM_EMAIL,
+        subject: 'Congratulations! You are now a pro member',
+        html: '<h2>welcome to project ROOTZSHOWCASE</h2><p>Hello, this email is sent from <b>rootzhowcase</b> application!</p><strong>Congratulation, you\'re a pro member now.</strong><br><p>You can review, reuse and learn from all my showcased projects\' source code. <br>Download the code from <i>Dashboard</i> of the application.</p><br><p><strong>NOTE:</strong> Please Logout your current session and login again to activate your <i>pro account</i>.</p><br><p>Karan Sharma,<br>Thank you!</p>',
     };
     sgMail.send(options)
         .then(res => {

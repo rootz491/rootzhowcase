@@ -108,6 +108,7 @@ userSchema.methods.genJwtToken = function () {
         const token = jwt.sign(
             {                       // payload
                 _id: this._id,
+                stripeId: this.stripeId,
                 username: this.username,
                 email: this.email,
                 isVerified: this.isVerified,

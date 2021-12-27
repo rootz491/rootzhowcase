@@ -26,13 +26,14 @@ exports.getUserWithPwd = async (email) => {
     }
 }
 
-exports.createUser = async (email, password, username, profileImage) => {
+exports.createUser = async (email, password, username, profileImage, stripeId) => {
     try {
         const newUser = new User({
             username,
             email,
             password,
-            profileImage
+            profileImage,
+            stripeId
         });
         return await newUser.save();
     } catch (error) {
@@ -60,6 +61,20 @@ exports.getUserByToken = async (token) => {
         if (!user) {
             throw "SERVICE: user not found";
         }
+        return user;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}
+
+exports.getUserByStripeId = async (stripeId) => {
+    try {
+        const user = await User.findOne({ stripeId }).select('isPro email');
+        if (!user) {
+            throw "SERVICE: user not found";
+        }
+        console.log(user);
         return user;
     } catch (error) {
         console.log(error)
