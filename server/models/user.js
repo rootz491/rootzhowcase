@@ -101,13 +101,15 @@ userSchema.methods.genVerificationToken = function () {
 
 // generate jwt token
 userSchema.methods.genJwtToken = function () {
+    const isAdmin = this.email === process.env.ADMIN_EMAIL ? true : false;
     return jwt.sign(
         {                       // payload
             _id: this._id,
             username: this.username,
             email: this.email,
             isVerified: this.isVerified,
-            isPro: this.isPro
+            isPro: this.isPro,
+            isAdmin
         }, 
         process.env.JWT_SECRET, // secret
         { expiresIn: "20m" }    // expires in 20 minutes

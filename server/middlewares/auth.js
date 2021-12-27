@@ -7,17 +7,23 @@ function isAuthenticated(req, res, next) {
             const token = res.headers.authorization.split(' ')[1];
             jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
                 if (err) {
-                    return res.status(401).json({
-                        message: 'Invalid token'
-                    });
+                    throw {
+                        msg: 'Invalid token',
+                        status: 401
+                    }
                 }
                 req.user = decoded;
                 next();
             });
+        } else {
+            throw {
+                msg: 'No token provided',
+                status: 401
+            }
         }
     } catch (error) {
-        res.status(401).json({
-            message: 'Invalid token'
+        res.status(error.status).json({
+            message: error.msg
         });
     }
 }
@@ -27,7 +33,7 @@ function isVerified(req, res, next) {
     if (req.user.isVerified) {
         next();
     }  else {
-        res.status(401).json({
+        res.status(403).json({
             message: 'User not verified'
         });
     }
@@ -38,10 +44,21 @@ function isPro(req, res, next) {
     if (req.user.isPro) {
         next();
     }  else {
-        res.status(401).json({
+        res.status(403).json({
             message: 'User not pro'
         });
     }
 }
 
-module.exports = { isAuthenticated, isVerified, isPro };
+//  check if user is admin
+function isAdmin(req, res, next) {
+    if (req.user.isAdmin) {
+        next();
+    }  else {
+        res.status(403).json({
+            message: 'User not admin'
+        });
+    }
+}
+
+module.exports = { isAuthenticated, isVerified, isPro, isAdmin };
