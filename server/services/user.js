@@ -2,7 +2,20 @@ const User = require('../models/user');
 
 exports.getUser = async (email) => {
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }, '-password -__v');
+        if (!user) {
+            throw "SERVICE: user not found";
+        }
+        return user;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+exports.getUserWithPwd = async (email) => {
+    try {
+        const user = await User.findOne({ email }, '-__v');
         if (!user) {
             throw "SERVICE: user not found";
         }
@@ -29,7 +42,7 @@ exports.createUser = async (email, password, username) => {
 
 exports.getUserById = async (id) => {
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).select('-password -__v');
         if (!user) {
             throw "SERVICE: user not found";
         }

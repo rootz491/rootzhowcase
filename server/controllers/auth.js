@@ -1,4 +1,4 @@
-const { getUser, createUser } = require('../services/user');
+const { getUserWithPwd, createUser } = require('../services/user');
 const {sendVerificationMail} = require('./email');
 
 // @route POST api/auth/register
@@ -15,7 +15,7 @@ exports.register = async (req, res) => {
             }
         }
         // check if user already exists
-        const user = await getUser(email);
+        const user = await getUserWithPwd(email);
         if (user) {
             throw {
                 msg: 'User already exists',
@@ -55,7 +55,7 @@ exports.login = async (req, res) => {
             }
         }
         // find user
-        const user = await getUser(email);
+        const user = await getUserWithPwd(email);
         if (!user) {
             throw {
                 msg: 'User does not exist',

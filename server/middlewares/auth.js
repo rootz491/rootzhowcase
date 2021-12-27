@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken';
+const jwt =  require('jsonwebtoken');
 
 // check if user is authenticated
 function isAuthenticated(req, res, next) {
     try {
-        if (res.headers.authorization) {
-            const token = res.headers.authorization.split(' ')[1];
+        if (req.headers.authorization) {
+            const token = req.headers.authorization.split(' ')[1];
             jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
                 if (err) {
                     throw {
@@ -22,6 +22,7 @@ function isAuthenticated(req, res, next) {
             }
         }
     } catch (error) {
+        console.log(error);
         res.status(error.status).json({
             message: error.msg
         });

@@ -11,6 +11,11 @@ const projectSchema = new mongoose.Schema({
         required: true,
         maxlength: 1000
     },
+    previewImg: {
+        type: String,
+        required: true,
+        maxlength: 1000
+    },
     technologies: { /// array of tech names
         type: [String],
         default: []
@@ -22,6 +27,7 @@ const projectSchema = new mongoose.Schema({
     },
     live: { // link to live project
         type: String,
+        required: true,
         maxlength: 100
     },
 });

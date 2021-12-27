@@ -79,7 +79,9 @@ userSchema.pre('save', function (next) {
 
 // compare password
 userSchema.methods.comparePassword = function (candidatePassword) {
+    console.log(this.password);
     return bcrypt.compare(candidatePassword, this.password);
+    // return true;
 };
 
 // generate password reset token
@@ -101,19 +103,25 @@ userSchema.methods.genVerificationToken = function () {
 
 // generate jwt token
 userSchema.methods.genJwtToken = function () {
-    const isAdmin = this.email === process.env.ADMIN_EMAIL ? true : false;
-    return jwt.sign(
-        {                       // payload
-            _id: this._id,
-            username: this.username,
-            email: this.email,
-            isVerified: this.isVerified,
-            isPro: this.isPro,
-            isAdmin
-        }, 
-        process.env.JWT_SECRET, // secret
-        { expiresIn: "20m" }    // expires in 20 minutes
-    );
+    const isAdmin = this.email === process.env.ADMIN_EMAIL ? true : false;  //  check if current user is admin (me)
+    try {
+        const token = jwt.sign(
+            {                       // payload
+                _id: this._id,
+                username: this.username,
+                email: this.email,
+                isVerified: this.isVerified,
+                isPro: isAdmin ? true : this.isPro, //  if user is admin, isPro is true
+                isAdmin 
+            }, 
+            process.env.JWT_SECRET, // secret
+            { expiresIn: "1h" }    // expires in 20 minutes
+        );
+        return token;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
 module.exports = mongoose.model('User', userSchema);

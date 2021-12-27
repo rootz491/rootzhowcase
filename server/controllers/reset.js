@@ -22,6 +22,12 @@ exports.requestReset = async (req, res) => {
                 status: 400
             }
         }
+        if (user.passwordResetExpires > Date.now()) {
+            throw {
+                msg: 'You have already requested a password reset, please check your email',
+                status: 400
+            }
+        }
         // generate reset token
         await user.genPwdResetToken();
         console.log(user.passwordResetToken);
