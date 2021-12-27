@@ -10,8 +10,8 @@ router.post('/:t', async (req, res) => {
     doReset(req, res);
 });
 
+// TODO send password reset form using which user will make post request to /api/reset/:token with new password
 router.get('/:token', async (req, res) => {
-    // send reset password form that will make post request to /api/reset/:token
     res.send(`later`);
 });
 

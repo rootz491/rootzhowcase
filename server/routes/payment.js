@@ -7,7 +7,7 @@ router.get('/', isAuthenticated, (req, res) => {
     initPayment(req, res);
 });
 
-router.post('/', (req, res) => {
+router.post('/webhook', (req, res) => {
     handlePayment(req, res);
 });
 

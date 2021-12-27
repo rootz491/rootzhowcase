@@ -4,6 +4,9 @@ const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
 exports.initPayment = async (req, res) => {
     try {
+        if (req.user.isPro || req.user.isAdmin) {
+            return res.status(400).json({ message: 'you\'re already a pro member' });
+        }
         const session = await stripe.checkout.sessions.create({
             customer: req.user.stripeId,
             payment_method_types: ['card'],
