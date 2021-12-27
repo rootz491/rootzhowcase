@@ -1,4 +1,5 @@
-const { getUserWithPwd, createUser } = require('../services/user');
+const fetch = require('node-fetch');
+const { getUserWithPwd, getUser, createUser } = require('../services/user');
 const {sendVerificationMail} = require('./email');
 
 // @route POST api/auth/register
@@ -15,15 +16,18 @@ exports.register = async (req, res) => {
             }
         }
         // check if user already exists
-        const user = await getUserWithPwd(email);
+        const user = await getUser(email);
         if (user) {
             throw {
                 msg: 'User already exists',
                 status: 400
             }
         }
+        // fetch a random profile avatar (svg)
+        const r = await fetch(`https://avatars.dicebear.com/api/human/${username}.svg`)
+        const profileImage = await r.text();
         // create new user
-        const newUser = await createUser(email, password, username);
+        const newUser = await createUser(email, password, username, profileImage);
         if (!newUser) { 
             throw {
                 msg: 'User could not be created, try again later',
@@ -37,6 +41,7 @@ exports.register = async (req, res) => {
         res.status(201).json({msg: 'User created successfully & verification token has been sent, please verify your email before login!'});
 
     } catch (error) {
+        console.log(error);
         res.status(error.status).json({message: error.msg});
     }
 }

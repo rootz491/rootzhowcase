@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
         default: ''
     },
     username: {
-        unique: false,
         type: String,
         required: true,
         maxlength: 30
@@ -32,6 +31,7 @@ const userSchema = new mongoose.Schema({
     },
     about: {
         type: String,
+        default: '',
         required: false,
         maxlength: 300,
     },

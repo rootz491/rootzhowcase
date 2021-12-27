@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 exports.getUser = async (email) => {
     try {
-        const user = await User.findOne({ email }, '-password -__v');
+        const user = await User.findOne({ email }, '-password -__v -profileImage -about -createdAt');
         if (!user) {
             throw "SERVICE: user not found";
         }
@@ -15,7 +15,7 @@ exports.getUser = async (email) => {
 
 exports.getUserWithPwd = async (email) => {
     try {
-        const user = await User.findOne({ email }, '-__v');
+        const user = await User.findOne({ email }, '-__v -profileImage -about -createdAt');
         if (!user) {
             throw "SERVICE: user not found";
         }
@@ -26,12 +26,13 @@ exports.getUserWithPwd = async (email) => {
     }
 }
 
-exports.createUser = async (email, password, username) => {
+exports.createUser = async (email, password, username, profileImage) => {
     try {
         const newUser = new User({
             username,
             email,
-            password
+            password,
+            profileImage
         });
         return await newUser.save();
     } catch (error) {
@@ -42,7 +43,7 @@ exports.createUser = async (email, password, username) => {
 
 exports.getUserById = async (id) => {
     try {
-        const user = await User.findById(id).select('-password -__v');
+        const user = await User.findById(id).select('-password -__v -passwordResetToken -passwordResetExpires -createdAt');
         if (!user) {
             throw "SERVICE: user not found";
         }
@@ -55,7 +56,7 @@ exports.getUserById = async (id) => {
 
 exports.getUserByToken = async (token) => {
     try {
-        const user = await User.findOne({ passwordResetToken: token });
+        const user = await User.findOne({ passwordResetToken: token }).select('-password -__v -passwordResetToken -passwordResetExpires -profileImage -about');
         if (!user) {
             throw "SERVICE: user not found";
         }
