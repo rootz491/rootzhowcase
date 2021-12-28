@@ -52,7 +52,7 @@ npm run dev
 
 * start stripe event listener
 ```
-stripe listen --forward-to http://localhost:1337/api/payment
+stripe listen --forward-to http://localhost:1337/api/payment/webhook
 ```
 
 * now try making payment or something, it should work 😅.

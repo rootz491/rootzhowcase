@@ -12,7 +12,7 @@ connect();
 const app = express();
 
 //  middlewares
-app.use('/api/payment/webhook', bodyParser.raw({type: "*/*"}))
+app.use('/api/payment/webhook', bodyParser.raw({type: "*/*"}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
