@@ -2,22 +2,28 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const cors = require('cors');
+const path = require('path');
 const {connect} = require('./configs/mongodb');
 const { isAuthenticated } = require('./middlewares/auth');
 require('dotenv').config({ path: '../.env' });
 
 //  connect to DB
-connect();
 const app = express();
+connect();
 
 //  middlewares
 app.use('/api/payment/webhook', bodyParser.raw({type: "*/*"}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
-app.use(helmet());
 app.use(morgan('dev'));
+app.use(helmet());
+//  serve static files in production env
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('../client/build'));
+    app.get('/', function (req, res) {
+        res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    });
+}
 
 //  routes
 app.use('/api/', require('./routes/api'));

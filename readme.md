@@ -10,7 +10,9 @@ This is a webapp for showing my projects, with a little twist of stripe api.
 
 ## current status
 
-designs are in progress.
+* [designs](https://www.figma.com/file/yJHPaWyAK5E9GxZeXP13kK/rootzhowcase) are in progress.
+
+* database [instance](https://cloud.mongodb.com/v2/60a3646cf87bb14be9bff18a#metrics/replicaSet/610d6d5718b9b229ebe1e229/explorer/rootzhowcase/projects/find)
 
 #   workflow 
 
@@ -61,5 +63,6 @@ stripe listen --forward-to http://localhost:1337/api/payment/webhook
 ## self note
 
 * react official docs for backend related [topics](https://create-react-app.dev/docs/proxying-api-requests-in-development).
+* integrating node API server with react [here](https://www.newline.co/fullstack-react/articles/using-create-react-app-with-a-server/).
 * stripe customer docs [here](https://stripe.com/docs/api/customers?lang=node).
 * stripe checkout session docs [here](https://stripe.com/docs/api/checkout/sessions?lang=node).
