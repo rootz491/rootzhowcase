@@ -1,12 +1,21 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
-export default function ProjectCard({ project, index }) {
+export default function ProjectCard({ project, index, height, width, fontSize }) {
+    const wrapper = useRef();
+    const heading = useRef();
+
+    useEffect(() => {
+        height ? wrapper.current.style.height = height : wrapper.current.style.height = '180px';
+        width ? wrapper.current.style.width = width : wrapper.current.style.width = '300px';
+        fontSize ? heading.current.style.fontSize = fontSize : heading.current.style.fontSize = '1.5rem';
+    }, [])
+
     return (
-        <CardWrapper key={index}>
-            <Heading>{ project.name }</Heading>
-            <Fader></Fader>
+        <CardWrapper ref={wrapper} key={index}>
             <Image src={ project.previewImg } alt={ project.name } />
+            <Fader></Fader>
+            <Heading ref={heading}>{ project.name }</Heading>
         </CardWrapper>
     )
 }
@@ -14,8 +23,6 @@ export default function ProjectCard({ project, index }) {
 const CardWrapper = styled.div`
     position: relative;
     top: 0;
-    height: 180px;
-    width: 300px;
     margin: auto;
     cursor: pointer;
     @media (max-width: 400px) {
@@ -30,7 +37,6 @@ const Heading = styled.h1`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 3;
 `;
 
 const Fader = styled.div`
@@ -40,7 +46,6 @@ const Fader = styled.div`
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2;
 `;
 
 const Image = styled.img`
@@ -49,5 +54,4 @@ const Image = styled.img`
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 1;
 `;

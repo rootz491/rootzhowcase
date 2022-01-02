@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ProjectCard from '../components/ProjectCard';
@@ -8,6 +8,7 @@ export default function Projects() {
     const [projects, setProjects] = useState([]);
     const [modalOpened, setModalOpened] = useState(false);
     const [modalProject, setModalProject] = useState({});
+    const mainDiv = useRef();
 
     useEffect(() => {
         // fetch projects from database
@@ -20,21 +21,26 @@ export default function Projects() {
     const handleModal = (projectIndex) => {
         setModalOpened(!modalOpened);
         setModalProject(projects[projectIndex]);
-    };
+    }
+
+    const closeModal = () => {
+        if (modalOpened)
+            setModalOpened(false);
+    }
 
     return (
         <>
-        <Main>
-            <h1>Project</h1>
+        <Main onClick={closeModal} ref={mainDiv}>
+            <h1>Project Preview</h1>
             <AllProjects>
                 {
                     projects.length > 0 ?
                     projects.map((project, i) => {
                         return (
                             <React.Fragment key={i}>
-                                <div onClick={() => handleModal(i)}>
+                                <ProjectCover onClick={() => handleModal(i)}>
                                     <ProjectCard project={project} />
-                                </div>
+                                </ProjectCover>
                             </React.Fragment>
                         )
                     })
@@ -61,6 +67,7 @@ const Main = styled.div`
 const AllProjects = styled.div`
     margin: 2rem auto;
     width: 80%;
+    min-height: 60vh;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     align-items: center;
@@ -75,4 +82,12 @@ const Error = styled.h1`
     font-size: 2rem;
     text-align: center;
     padding: 1rem 0;
+`;
+
+const ProjectCover = styled.div`
+    width: min-content;
+    margin: auto;
+    &:hover {
+        outline: 3px solid purple;
+    }
 `;

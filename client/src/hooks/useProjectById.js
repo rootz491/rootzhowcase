@@ -14,6 +14,6 @@ export default async projectId => {
         return data;
     }
     else {
-        return null;
+        return false;
     }
 }
