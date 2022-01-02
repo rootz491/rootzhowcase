@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Modal from '../components/Modal';
 import ProjectCard from '../components/ProjectCard';
+import useProjects from '../hooks/useProjects';
 
 export default function Projects() {
     const [projects, setProjects] = useState([]);
@@ -9,18 +10,11 @@ export default function Projects() {
     const [modalProject, setModalProject] = useState({});
 
     useEffect(() => {
-        // fetch projects from backend
-        fetch('/api/projects', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNhMWQwMTk4ZmY4ZjQ0NGE1NTliNDciLCJzdHJpcGVJZCI6ImN1c19LcjdqN1dEM1Q5RGVPWiIsInVzZXJuYW1lIjoidGVzdCAxIiwiZW1haWwiOiJyb290ejQ5MSsxQHdlYXJlaGFja2Vyb25lLmNvbSIsImlzVmVyaWZpZWQiOnRydWUsImlzUHJvIjp0cnVlLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNjQwNzczNTYwLCJleHAiOjE2NDA3NzcxNjB9.tFBFYxbnBfWkIIvrwSXSHWKxlzACvKhpH3BrQhty3pc`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            setProjects(data && data.length > 0 ? data : []);
-        });
+        // fetch projects from database
+        const FetchProjects = async () => {
+            setProjects(await useProjects());
+        }
+        FetchProjects();
     }, []);
 
     const handleModal = (projectIndex) => {

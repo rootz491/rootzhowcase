@@ -3,7 +3,7 @@ const Project = require('../models/project');
 // get all projects without zip
 exports.getAllProjects = async () => {
     try {
-        const projects = await Project.find().select('-__v -zip -description'); // don't include __v, zip and description
+        const projects = await Project.find().select('-__v -zip -description -live'); // don't include __v, zip and description
         if (!projects)
             throw "SERVICE: projects not found";
         return projects;
