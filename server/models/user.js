@@ -115,7 +115,7 @@ userSchema.methods.genJwtToken = function () {
                 isAdmin 
             }, 
             process.env.JWT_SECRET, // secret
-            { expiresIn: "1h" }    // expires in 20 minutes
+            { expiresIn: "6d" }    // expires in 20 minutes
         );
         return token;
     } catch (error) {

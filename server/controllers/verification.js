@@ -6,7 +6,7 @@ const { sendVerificationMail } = require('./email');
 // @desc Resend verification email
 // @access Public
 exports.resend = async (req, res) => {
-    const { email } = req.body;
+    const { email } = req.user;
     try {
         if (!email) {
             throw {
@@ -33,7 +33,7 @@ exports.resend = async (req, res) => {
         // send verification email
         sendVerificationMail(user.email, verToken.token);
         // send response
-        res.status(200).json({msg: `Verification token has been sent to ${user.email}, please verify your email before login!`});
+        res.status(200).json({message: `Verification token has been sent to ${user.email}, please verify your email before login!`});
     } catch (error) {
         res.status(error.status).json({message: error.msg});
     }
@@ -72,7 +72,7 @@ exports.verify = async (req, res) => {
         user.isVerified = true;
         await user.save();
         // send response
-        res.status(200).json({msg: 'User has been verified, please login!'});
+        res.status(200).json({message: 'User has been verified, please login!'});
     } catch (error) {
         res.status(error.status).json({message: error.msg});
     }

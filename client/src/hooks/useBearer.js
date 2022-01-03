@@ -1,11 +1,9 @@
 import decode from 'jwt-decode';
 
 export default async () => {
-    // dev
-    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWNhMGM4MDU1MTNkZDM0ZWM4YWM3YTUiLCJzdHJpcGVJZCI6IiIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoicm9vdHo0OTFAd2VhcmVoYWNrZXJvbmUuY29tIiwiaXNWZXJpZmllZCI6dHJ1ZSwiaXNQcm8iOnRydWUsImlzQWRtaW4iOnRydWUsImlhdCI6MTY0MTExMzgyNCwiZXhwIjoxNjQxNjMyMjI0fQ.gGiX-848VoB2fJfa5yPgbs6vic5ezS-63KVd727UbR8';
-    // prod
     try {
         const authToken = localStorage.getItem("authToken");
+        return authToken;
         const refreshToken = localStorage.getItem("refreshToken");
         if (!authToken || !refreshToken)
             return false;

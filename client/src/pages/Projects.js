@@ -19,13 +19,18 @@ export default function Projects() {
     }, []);
 
     const handleModal = (projectIndex) => {
-        setModalOpened(!modalOpened);
         setModalProject(projects[projectIndex]);
+        setModalOpened(true);
+        console.log('opening modal');
+        mainDiv.current.style.opacity = '0.3';
     }
 
     const closeModal = () => {
-        if (modalOpened)
+        if (modalOpened) {
+            console.log('closing modal');
+            mainDiv.current.style.opacity = '1';
             setModalOpened(false);
+        }
     }
 
     return (
@@ -48,7 +53,7 @@ export default function Projects() {
                 }
             </AllProjects>
         </Main>
-        { modalOpened ? <Modal project={modalProject} /> : null }
+        { modalOpened ? <Modal project={modalProject} projects={projects} /> : null }
         </>
     )
 }
@@ -87,7 +92,4 @@ const Error = styled.h1`
 const ProjectCover = styled.div`
     width: min-content;
     margin: auto;
-    &:hover {
-        outline: 3px solid purple;
-    }
 `;

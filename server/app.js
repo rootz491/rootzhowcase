@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const path = require('path');
 const {connect} = require('./configs/mongodb');
-const { isAuthenticated } = require('./middlewares/auth');
+const { isAuthenticated, isVerified } = require('./middlewares/auth');
 require('dotenv').config({ path: '../.env' });
 
 //  connect to DB
@@ -30,7 +30,7 @@ app.use('/api/', require('./routes/api'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/verification', require('./routes/verification'));
 app.use('/api/reset', require('./routes/reset'));
-app.use('/api/projects', isAuthenticated, require('./routes/project'));
+app.use('/api/projects', isAuthenticated, isVerified, require('./routes/project'));
 app.use('/api/payment', require('./routes/payment'));
 
 app.use('*', (req, res) => {

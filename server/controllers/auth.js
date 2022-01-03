@@ -45,7 +45,7 @@ exports.register = async (req, res) => {
         const verToken = await newUser.genVerificationToken();
         sendVerificationMail(newUser.email, verToken.token);
         // send response
-        res.status(201).json({msg: 'User created successfully & verification token has been sent, please verify your email before login!'});
+        res.status(201).json({message: 'User created successfully & verification token has been sent, please verify your email before login!'});
 
     } catch (error) {
         console.log(error);
@@ -82,17 +82,17 @@ exports.login = async (req, res) => {
                 status: 400
             }
         }
-        // check if user is verified
-        if (!user.isVerified) {
-            throw {
-                msg: 'User is not verified',
-                status: 400
-            }
-        }
+        // check if user is verified            [REMOVING THIS CHECK FOR NOW]
+        // if (!user.isVerified) {
+        //     throw {
+        //         msg: 'User is not verified',
+        //         status: 400
+        //     }
+        // }
         // generate JWt token
-        const token = await user.genJwtToken();
+        const authToken = await user.genJwtToken();
         // send response
-        res.status(200).json({token});
+        res.status(200).json({authToken});
     } catch (error) {
         res.status(error.status).json({message: error.msg});
     }

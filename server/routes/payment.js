@@ -1,9 +1,9 @@
 const express = require('express');
 const { initPayment, handlePayment } = require('../controllers/payment');
-const { isAuthenticated } = require('../middlewares/auth');
+const { isAuthenticated, isVerified } = require('../middlewares/auth');
 const router = express.Router();
 
-router.get('/', isAuthenticated, (req, res) => {
+router.get('/', isAuthenticated, isVerified, (req, res) => {
     initPayment(req, res);
 });
 
