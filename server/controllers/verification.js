@@ -1,5 +1,5 @@
 const { getUser, getUserById } = require('../services/user');
-const { getToken } = require('../services/token');
+const { getToken, getTokenByUserId } = require('../services/token');
 const { sendVerificationMail } = require('./email');
 
 // @route POST api/verification/resend
@@ -25,6 +25,14 @@ exports.resend = async (req, res) => {
         if (user.isVerified) {
             throw {
                 msg: 'User is already verified',
+                status: 400
+            }
+        }
+        // check if a verification token exists
+        const token = await getTokenByUserId(user._id);
+        if (token) {
+            throw {
+                msg: 'Verification token already exists, please check your inbox!',
                 status: 400
             }
         }

@@ -12,3 +12,15 @@ exports.getToken = async t => {
         return false;
     }
 }
+
+exports.getTokenByUserId = async userId => {
+    try {
+        const token = await Token.findOne({ userId });
+        if (!token) {
+            throw "SERVICE: token not found";
+        }
+        return token;
+    } catch (error) {
+        
+    }
+}

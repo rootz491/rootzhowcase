@@ -44,7 +44,7 @@ exports.createUser = async (email, password, username, profileImage, stripeId) =
 
 exports.getUserById = async (id) => {
     try {
-        const user = await User.findById(id).select('-password -__v -passwordResetToken -passwordResetExpires -createdAt');
+        const user = await User.findById(id).select('-password -__v -passwordResetToken -passwordResetExpires');
         if (!user) {
             throw "SERVICE: user not found";
         }

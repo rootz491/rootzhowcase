@@ -100,6 +100,9 @@ const Button = styled.button`
     padding: 4px 15px;
     border-radius: 2px;
     border: 1px solid #ccc;
+    background-color: #995CE7;
+    color: white;
+    cursor: pointer;
 `;
 
 const Error = styled.p`
@@ -110,4 +113,5 @@ const Error = styled.p`
 const Success = styled.p`
     color: green;
     text-align: center;
+    max-width: 70%;
 `;

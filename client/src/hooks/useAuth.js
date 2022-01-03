@@ -1,7 +1,7 @@
 import decode from "jwt-decode";
 import useReset from "./useReset";
 
-export default () => {
+export default async () => {
 
     const authToken = localStorage.getItem("authToken");
     // const refreshToken = localStorage.getItem("refreshToken");
@@ -9,7 +9,7 @@ export default () => {
     if (!authToken) return false;
     try {
         // const { exp } = decode(refreshToken)
-        const { exp } = decode(authToken)
+        const { exp } = await decode(authToken)
 
         if (exp < new Date().getTime() / 1000) {
             useReset();
