@@ -1,4 +1,23 @@
-const { getUserById, } = require('../controllers/user');
+const { getUserById } = require('../services/user');
+
+// @route   GET api/user
+// @desc    Get current user's info
+// @access  Protected
+exports.getUserByToken = async (req, res) => {
+    try {
+        const user = await getUserById(req.user._id);
+        if (!user) {
+            throw {
+                status: 404,
+                msg: 'User not found'
+            };
+        }
+        res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(error.status).json({ message: error.msg });
+    }
+}
 
 // @route   GET api/user/:id
 // @desc    Get user by id

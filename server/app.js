@@ -29,9 +29,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/api/', require('./routes/api'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/verification', require('./routes/verification'));
+app.use('/api/payment', require('./routes/payment'));
 app.use('/api/reset', require('./routes/reset'));
 app.use('/api/projects', isAuthenticated, isVerified, require('./routes/project'));
-app.use('/api/payment', require('./routes/payment'));
+app.use('/api/user', isAuthenticated, require('./routes/user'));
 
 app.use('*', (req, res) => {
     res.status(404).json({ message: 'Not Found' });
