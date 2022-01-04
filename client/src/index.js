@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
 	BrowserRouter,
-	Routes,
+	Switch,
 	Route
 } from "react-router-dom";
 import App from './App';
@@ -12,28 +12,21 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Unverified from './pages/Unverified';
 import NotFound from './pages/NotFound';
-import ProtectedRoute from './components/pseudo/ProtectedRoute';
+import PrivateRoute from './components/pseudo/PrivateRoute';
 import VerifiedRoute from './components/pseudo/VerifiedRoute';
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
     <BrowserRouter>
-        <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/unverified" element={<ProtectedRoute />}>
-                <Route path="/unverified" element={<Unverified />} />
-            </Route>
-            <Route exact path="/" element={<ProtectedRoute />}>
-                <Route exact path='/' element={<App/>}/>
-            </Route>
-            <Route exact path="/projects" element={<ProtectedRoute />}>
-                <Route exact path='/projects' element={<Projects />} />
-            </Route>
-            
-            <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/about" component={About} />
+            <Route exact path="/signup" component={Signup} />
+            <PrivateRoute exact path="/" component={App} />
+            <PrivateRoute exact path="/unverified" component={Unverified} />
+            <VerifiedRoute  exact path="/projects" component={Projects} />
+            <Route exact path="*" component={NotFound} />
+        </Switch>
     </BrowserRouter>,
     rootElement
 );

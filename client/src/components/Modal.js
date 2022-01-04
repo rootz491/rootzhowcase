@@ -47,7 +47,8 @@ export default function Modal({ project, projects }) {
     }
 
     function selectOtherProject(i) {
-        if (loading)    return;
+        if (loading) return;
+        if (otherProjects[i]._id === selectedProject) return;
         setSelectedProject(otherProjects[i]._id);
     }
 
@@ -160,6 +161,7 @@ const ModalWrapper = styled.div`
         height: 60%;
     }
     @media (max-width: 450px) {
+        padding: 5px;
         height: 400px;
     }
 `;

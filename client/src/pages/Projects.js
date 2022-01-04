@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
+import Header from '../components/Header';
 import Modal from '../components/Modal';
 import ProjectCard from '../components/ProjectCard';
 import useProjects from '../hooks/useProjects';
@@ -34,7 +35,8 @@ export default function Projects() {
     }
 
     return (
-        <>
+        <Container>
+        <Header />
         <Main onClick={closeModal} ref={mainDiv}>
             <h1>Project Preview</h1>
             <AllProjects>
@@ -54,15 +56,18 @@ export default function Projects() {
             </AllProjects>
         </Main>
         { modalOpened ? <Modal project={modalProject} projects={projects} /> : null }
-        </>
+        </Container>
     )
 }
 
-const Main = styled.div`
-    padding: 1rem 0;
-    background-color: #f5f5f5;
+const Container = styled.div`
     min-height: 100vh;
     width: 100vw;
+    background-color: #f5f5f5;
+`;
+
+const Main = styled.div`
+    padding: 1rem 0;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
 import Design from '../components/Design';
 import useUser from '../hooks/useUser';
-import useAuth from '../hooks/useAuth';
 import useBearer from '../hooks/useBearer';
 
 export default function Unverified() {
@@ -11,27 +10,27 @@ export default function Unverified() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [token, setToken] = useState('');
-    const navigate = useNavigate();
+    const history = useHistory();
 
     useEffect(() => {
+        const IsAuthenticated = async () => {
+            const user = useUser();
+            const t = await useBearer();
+            if (user.isVerified) {
+                history.push('/');
+            } else {
+                setUsername(user.username);
+                setToken(t);
+            }
+        }
         IsAuthenticated();
     }, []);
 
-    const IsAuthenticated = async () => {
-        const authenticated = await useAuth();
-        const user = await useUser();
-        const t = await useBearer();
-        if (!authenticated) {
-            navigate('/login');
-        } else {
-            setUsername(user.username);
-            setToken(t);
-        }
-    }
 
     async function handleResend(e) {
         e.preventDefault();
         setError('');
+        setSuccess('');
         const res = await fetch('/api/verification/resend', {
             method: 'POST',
             headers: {

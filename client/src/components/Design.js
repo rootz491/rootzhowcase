@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export default function Design() {
     return (
         <Outline>
-            <Heading>rootzhowcase</Heading>
+            <Link to='/'><Heading>rootzhowcase</Heading></Link>
             <Txt>
             Browse various projects, download, share &amp; reuse with ease
             </Txt>
@@ -30,6 +31,7 @@ const Heading = styled.h1`
     font-family: 'Pacifico';
     color: #fff;
     padding: 2rem;
+    text-decoration: none;
 `;
 
 const Txt = styled.p`

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Design from '../components/Design';
 
 export default function Login() {
@@ -8,7 +8,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+    const history = useHistory();
 
     async function handleLogin(e) {
         e.preventDefault();
@@ -24,7 +24,7 @@ export default function Login() {
         const data = await res.json();
         if (res.status === 200) {
             localStorage.setItem('authToken', data.authToken);
-            navigate('/');
+            history.push('/');
         }
         else {
             setError(data.message);
