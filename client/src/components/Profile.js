@@ -1,11 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import styled from 'styled-components'
 import useBearer from '../hooks/useBearer';
 import {parseISO, format} from 'date-fns';
+import ContentEditable from 'react-contenteditable';
 
 export default function Profile() {
     const [user, setUser] = useState({});
     const [date, setDate] = useState('');
+    const editBox = useRef();
+    const [desc, setDesc] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState();
 
     useEffect(() => {
         async function FetchUser() {
@@ -21,10 +27,52 @@ export default function Profile() {
             // setting up date
             const date = parseISO(data.createdAt);
             setDate(format(date, 'MMMM yyyy'));
+            // setting up description
+            setDesc('.' + data.about);
+            // setting up token
+            setToken(await useBearer());
+            // setting up isLoading
+            setIsLoading(false);
         }
         FetchUser();
     }, []);
 
+    function handleEditBtn() {
+        console.log('edit');
+        setIsEditing(!isEditing);
+        if (isEditing) {
+            editBox.current.focus();
+            console.log(editBox.current);
+        } else {
+            editBox.current.style.outline = `none`;
+            editBox.current.value = desc;
+        }
+    }
+
+    async function handleEditSave() {
+        console.log('save');
+        setIsEditing(!isEditing);
+        // make req to save new description!
+        const res = await fetch('/api/user', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                about: desc
+            })
+        });
+        const data = await res.json();
+        console.log(data);
+        user.about = desc;
+        console.log(user);
+        setUser(user);
+    }
+
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
     return (
         <ProfileWrapper>
             <Main>
@@ -37,12 +85,25 @@ export default function Profile() {
                     </Info>
                 </Me>
                 <More>
-                    <Date>
-                        Joined on {user ? date : "December 2021"}
-                    </Date>
+                    <MoreHead>
+                        <Date>
+                            Joined on {user ? date : "December 2021"}
+                        </Date>
+                        <EditBtn onClick={handleEditBtn} src="edit.png" alt="edit" />
+                    </MoreHead>
                     <Desc>
-                        <pre>{user.about}</pre>
+                        {
+                            !isEditing && user.about.length === 0 ? 
+                            <DoodleWrapper><Doodle src="about.png" alt="doodle"/></DoodleWrapper> :
+                            <Pre><ContentEditable
+                                innerRef={editBox}
+                                html={desc}
+                                disabled={!isEditing}
+                                onChange={(e) => setDesc(e.target.value)}
+                            /></Pre>
+                        }
                     </Desc>
+                    { isEditing ? <SaveBtn onClick={handleEditSave}>Save</SaveBtn> : null }
                 </More>
             </Main>
             <Footer>
@@ -84,6 +145,11 @@ const ImgWrapper = styled.div`
     width: 120px;
     height: 120px;
     border-radius: 100%;
+    position: relative;
+    @media (max-width: 600px) {
+        width: 100px;
+        height: 100px;
+    }
 `;
 
 const Info = styled.div`
@@ -99,6 +165,9 @@ const Name = styled.h1`
     @media (max-width: 600px) {
         font-size: 2rem;
     }
+    @media (max-width: 400px) {
+        font-size: 1.5rem;
+    }
 `;
 
 const Email =  styled.h2`
@@ -108,12 +177,12 @@ const Email =  styled.h2`
         font-size: 1rem;
     }
     @media (max-width: 400px) {
-        font-size: .6rem;
+        font-size: .8rem;
     }
 `;
 
 const More = styled.div`
-    padding: 1rem 0;
+    padding: .5rem 0;
     @media (max-width: 600px) {
         padding: 0 1rem;
     }
@@ -124,6 +193,7 @@ const Date = styled.h4`
     letter-spacing: 1px;
     font-weight: 200;
     @media (max-width: 600px) {
+        font-size: .6rem;
         padding: 1rem 0;
     }
 `;
@@ -163,4 +233,45 @@ border-radius: 5px;
 width: max-content;
     border: none;
     color: #FFF;
+`;
+
+const Doodle = styled.img`
+    width: 100%;
+`;
+
+const DoodleWrapper = styled.div`
+    width: 300px;
+    margin: auto;
+`;
+
+const MoreHead = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const EditBtn = styled.img`
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+`;
+
+const SaveBtn = styled.button`
+    padding: 4px 10px;
+    font-size: .8rem;
+    background-color: #0D7BC5;
+    border-radius: 5px;
+    border: none;
+    margin: auto;
+`;
+
+const Pre = styled.pre`
+    & > div {
+        padding: 5px;
+        min-height: 150px;
+        margin-bottom: 20px;
+    }
+    & > div:focus {
+        outline: 1px solid blue;
+    }
 `;
