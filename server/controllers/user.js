@@ -38,12 +38,13 @@ exports.getUser = async (req, res) => {
     }
 }
 
-// @route   PUT api/user/:id
+// @route   PUT api/user/
 // @desc    Update user by id
 // @access  Protected
 exports.updateUser = async (req, res) => {
     try {
-        const user = await getUserById(req.params.id);
+        console.log(req.body.about);
+        const user = await getUserById(req.user._id);
         if (!user) {
             throw {
                 status: 404,
@@ -51,7 +52,7 @@ exports.updateUser = async (req, res) => {
             };
         }
         // update user
-        user.about = req.about;
+        user.about = req.body.about;
         await user.save();
         res.json(user);
     } catch (error) {
