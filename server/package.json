@@ -6,11 +6,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "start-all": "npm run dev & cd ../client && npm start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cd ../client && npm run build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["mern", "stripe", "full stack", "react", "nodeJs"],
+  "author": "karansh491",
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.6.0",
@@ -29,5 +28,8 @@
     "nodemon": "^2.0.15",
     "path": "^0.12.7",
     "stripe": "^8.195.0"
+  },
+  "engines": {
+    "node": "16.13.1"
   }
 }
