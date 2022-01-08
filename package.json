@@ -1,21 +1,24 @@
 {
   "name": "rootzhowcase",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "This is a webapp for showing my projects, with a little twist of stripe api.",
   "main": "index.js",
   "scripts": {
     "start": "cd server && npm start",
-    "build": "cd client && npm run build"
+    "build": "cd server && npm install && cd ../client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rootz491/rootzhowcase.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "rootz491",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rootz491/rootzhowcase/issues"
   },
-  "homepage": "https://github.com/rootz491/rootzhowcase#readme"
+  "homepage": "https://github.com/rootz491/rootzhowcase#readme",
+  "engines": {
+    "node": "16.13.1"
+  }
 }
