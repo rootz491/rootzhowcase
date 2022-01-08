@@ -84,14 +84,18 @@ const InputWrapper = styled.div`
     display: grid;
     gap: .5rem;
     margin: .5rem 0;
-`
+`;
 
 const Button = styled.button`
     width: min-content;
     padding: 4px 15px;
     border-radius: 2px;
     border: 1px solid #ccc;
+    background-color: #995CE7;
+    color: white;
+    cursor: pointer;
 `;
+
 
 const Form = styled.form`
     display: grid;

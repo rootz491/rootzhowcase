@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Design from '../components/Design';
 import useUser from '../hooks/useUser';
 import useBearer from '../hooks/useBearer';
+import useReset from '../hooks/useReset';
 
 export default function Unverified() {
     const [username, setUsername] = useState('');
@@ -26,6 +27,9 @@ export default function Unverified() {
         IsAuthenticated();
     }, []);
 
+    async function HandleLogout() {
+        useReset();
+    }
 
     async function handleResend(e) {
         e.preventDefault();
@@ -54,7 +58,10 @@ export default function Unverified() {
                 <Txt>Pleace check your inbox and verify your account.</Txt>
                 <Form onSubmit={handleResend}>
                     <p>Verification link expired? <Link to="/">resend</Link></p>
-                    <Button type='submit'>resend</Button>
+                    <Btns>
+                        <Button type='submit'>resend</Button>
+                        <Button onClick={HandleLogout}>logout</Button>
+                    </Btns>
                 </Form>
                 { error ? <Error>{error}</Error> : null }
                 { success ? <Success>{success}</Success> : null }
@@ -113,4 +120,9 @@ const Success = styled.p`
     color: green;
     text-align: center;
     max-width: 70%;
+`;
+
+const Btns = styled.p`
+    disply: flex;
+    justify-content: space-between;
 `;

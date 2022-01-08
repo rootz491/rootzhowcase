@@ -49,6 +49,7 @@ export default function Login() {
                     <InputWrapper>
                         <p>Forgot password? <Link to="/reset"><Reset>reset</Reset></Link></p>
                         <Button disabled={loading} type='submit'>login</Button>
+                        <Signup>new here? <Link to="/signup"><Reset>signup</Reset></Link></Signup>
                     </InputWrapper>
                     {
                         error ? <Error>{error}</Error> : null
@@ -120,4 +121,8 @@ const Heading = styled.h1`
     @media (max-width: 600px) {
         font-size: 1.7rem;
     }
+`;
+
+const Signup = styled.p`
+    text-align: center;
 `;

@@ -42,8 +42,10 @@ exports.handlePayment = async (req, res) => {
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
     let event = req.body;
     try {
+        console.log('payment event recieved');
         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
         // Handle the event
+        console.log('payment event responding');
         switch (event.type) {
             case 'charge.succeeded':
                 const { customer } = event.data.object
