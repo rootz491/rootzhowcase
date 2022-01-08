@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUser, getUserByToken, updateUser } = require('../controllers/user');
+const { getUser, getUserByToken, updateUser, deleteUser } = require('../controllers/user');
 const { isVerified } = require('../middlewares/auth');
 const router = express.Router();
 
@@ -14,5 +14,9 @@ router.get('/:id', isVerified, (req, res) => {
 router.put('/', isVerified, (req, res) => {
     updateUser(req, res);
 });
+
+router.delete('/', isVerified, (req, res) => {
+    deleteUser(req, res);
+})
 
 module.exports = router;

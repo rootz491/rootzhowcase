@@ -2,6 +2,9 @@ const { getUserByStripeId } = require('../services/user');
 const { sendProMemberConfirmationMail } = require('../controllers/email');
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 
+// @route GET /api/payment
+// @desc initiate new payment
+// @access protected
 exports.initPayment = async (req, res) => {
     try {
         if (req.user.isPro || req.user.isAdmin) {
@@ -14,7 +17,7 @@ exports.initPayment = async (req, res) => {
                 name: 'pro membership',
                 description: 'with this membership, can access to source code of all my showcased projects!',
                 // images: ['https://example.com/t-shirt.png'],
-                amount: 50 * 100,   //  rs. 50
+                amount: 111.42 * 100,   //  $ 2
                 currency: 'inr',
                 quantity: 1,
             }],
@@ -31,6 +34,9 @@ exports.initPayment = async (req, res) => {
     }
 }
 
+// @route GET /api/payment/webhook
+// @desc listen for payment completions
+// @access stripe
 exports.handlePayment = async (req, res) => {
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;

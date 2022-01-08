@@ -81,3 +81,13 @@ exports.getUserByStripeId = async (stripeId) => {
         return false;
     }
 }
+
+exports.deleteUserById = async id => {
+    try {
+        const user = await User.findOneAndDelete({ _id: id });
+        return user ? true : false;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}

@@ -14,6 +14,7 @@ import Unverified from './pages/Unverified';
 import NotFound from './pages/NotFound';
 import PrivateRoute from './components/pseudo/PrivateRoute';
 import VerifiedRoute from './components/pseudo/VerifiedRoute';
+import Reset from './pages/Reset';
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
@@ -22,8 +23,9 @@ ReactDOM.render(
             <Route exact path="/login" component={Login} />
             <Route exact path="/about" component={About} />
             <Route exact path="/signup" component={Signup} />
-            <PrivateRoute exact path="/" component={App} />
+            <Route exact path="/reset" component={Reset} />
             <PrivateRoute exact path="/unverified" component={Unverified} />
+            <VerifiedRoute exact path="/" component={App} />
             <VerifiedRoute  exact path="/projects" component={Projects} />
             <Route exact path="*" component={NotFound} />
         </Switch>

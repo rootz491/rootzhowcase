@@ -62,3 +62,20 @@ exports.sendProMemberConfirmationMail = (email) => {
             console.log('error while sending mail: '+err);
         });
 }
+
+exports.sendGoodByeMail = (email) => {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const options = {
+        to: email,
+        from: process.env.SENDGRID_FROM_EMAIL,
+        subject: 'Good Bye from rootzhowcase',
+        html: '<h2>Good Bye from project ROOTZSHOWCASE</h2><p>Hello, this email is sent from <b>rootzhowcase</b> application!</p><strong>Hope we can see you again.</strong><br><p><strong>NOTE:</strong> If you were pro member, It\'s membership is also gone with your account.</p><br><p>Karan Sharma,<br>Thank you!</p>',
+    };
+    sgMail.send(options)
+        .then(res => {
+            console.log('mail sent successfully');
+        })
+        .catch(err => {
+            console.log('error while sending mail: '+err);
+        });
+}

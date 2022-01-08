@@ -1,6 +1,44 @@
 const { getUser, getUserByToken } = require('../services/user');
 const { sendPasswordResetMail } = require('./email');
 
+// @route GET api/reset
+// @desc request reset password for authenticated user
+exports.requestResetByToken = async (req, res) => {
+    const { email } = req.user;
+    try {
+        // verify email field
+        if (!email) {
+            throw {
+                msg: 'email is required',
+                status: 400
+            }
+        }
+        // find user
+        const user = await getUser(email);
+        if (!user) {
+            throw {
+                msg: 'User does not exist',
+                status: 400
+            }
+        }
+        if (user.passwordResetExpires > Date.now()) {
+            throw {
+                msg: 'You have already requested a password reset, please check your email',
+                status: 400
+            }
+        }
+        // generate reset token
+        await user.genPwdResetToken();
+        console.log(user.passwordResetToken);
+        // send password reset email
+        sendPasswordResetMail(user.email, user.passwordResetToken);
+        // send response
+        res.status(200).json({message: `password reset link has been sent to ${user.email}, please check your email asap!`});
+    } catch (error) {
+        res.status(error.status).json({message: error.msg});
+    }
+}
+
 // @route POST api/reset
 // @desc request reset password
 // @access Public
@@ -30,7 +68,6 @@ exports.requestReset = async (req, res) => {
         }
         // generate reset token
         await user.genPwdResetToken();
-        console.log(user.passwordResetToken);
         // send password reset email
         sendPasswordResetMail(user.email, user.passwordResetToken);
         // send response

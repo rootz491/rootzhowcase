@@ -4,7 +4,6 @@ import Card from "./components/Card";
 import Profile from './components/Profile';
 import Header from './components/Header';
 
-
 export default function App() {
 	return (
 		<Container id='rootz' className="App">
@@ -14,7 +13,7 @@ export default function App() {
 					<Profile />
 				</ProfileWrapper>
 				<CardWrapper>
-					<Card />
+					<Card width="340px"/>
 				</CardWrapper>
 			</Main>
 		</Container>
@@ -37,6 +36,12 @@ const Main = styled.div`
 			min-height: 60vh;
 		}
 	}
+	@media (max-width: 700px) {
+		flex-direction: column;
+		& > div {
+			min-height: auto;
+		}
+	}
 `;
 
 const ProfileWrapper = styled.div`
@@ -46,7 +51,9 @@ const ProfileWrapper = styled.div`
 
 const CardWrapper = styled.div`
 	width: 500px;
-	background-color: yellow;
+	display: grid;
+	place-content: center;
+	// background-color: yellow;
 	@media (max-width: 1100px) {
 		width: 400px;
 	}
@@ -54,6 +61,8 @@ const CardWrapper = styled.div`
 		width: 300px;
 	}
 	@media (max-width: 700px) {
-		display: none;
+		display: 100%;
+		align-self: center;
+		margin: 2rem 0;
 	}
 `;

@@ -1,4 +1,5 @@
-const { getUserById } = require('../services/user');
+const { getUserById, deleteUserById, getUserWithPwd } = require('../services/user');
+const { sendGoodByeMail } = require('./email');
 
 // @route   GET api/user
 // @desc    Get current user's info
@@ -55,6 +56,39 @@ exports.updateUser = async (req, res) => {
         user.about = req.body.about;
         await user.save();
         res.json(user);
+    } catch (error) {
+        console.log(error);
+        res.status(error.status).json({ message: error.msg });
+    }
+}
+
+// @route   DELETE api/user/
+// @desc    Delete user by id
+// @access  Protected
+exports.deleteUser = async (req, res) => {
+    try {
+        const password = req.body.password;
+        if (!password)
+            throw {
+                status: 400,
+                msg: 'password is required!'
+            }
+        const user = await getUserWithPwd(req.user.email);
+        const correctPassword = await user.comparePassword(password);
+        if (!correctPassword)
+            throw {
+                status: 400,
+                msg: 'incorrect password'
+            }
+        const deleted = await deleteUserById(req.user._id);
+        if (!deleted) {
+            throw {
+                status: 400,
+                msg: 'something went wrong, please try again later!'
+            };
+        }
+        await sendGoodByeMail(req.user.email);
+        res.json({success: true});
     } catch (error) {
         console.log(error);
         res.status(error.status).json({ message: error.msg });

@@ -16,7 +16,8 @@ app.use('/api/payment/webhook', bodyParser.raw({type: "*/*"}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan('dev'));
-app.use(helmet());
+// app.use(helmet());
+
 //  serve static files in production env
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('../client/build'));
@@ -35,7 +36,8 @@ app.use('/api/projects', isAuthenticated, isVerified, require('./routes/project'
 app.use('/api/user', isAuthenticated, require('./routes/user'));
 
 app.use('*', (req, res) => {
-    res.status(404).json({ message: 'Not Found' });
+    res.redirect('/');
+    // res.status(404).json({ message: 'Not Found' });
 })
 
 app.listen(1337, () => {

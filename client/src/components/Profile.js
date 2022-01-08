@@ -1,8 +1,10 @@
 import React, {useEffect, useState, useRef} from 'react'
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components'
 import useBearer from '../hooks/useBearer';
 import {parseISO, format} from 'date-fns';
 import ContentEditable from 'react-contenteditable';
+import useReset from '../hooks/useReset';
 
 export default function Profile() {
     const [user, setUser] = useState({});
@@ -11,7 +13,10 @@ export default function Profile() {
     const [desc, setDesc] = useState('');
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [token, setToken] = useState();
+    const history = useHistory();
 
     useEffect(() => {
         async function FetchUser() {
@@ -38,7 +43,6 @@ export default function Profile() {
     }, []);
 
     function handleEditBtn() {
-        console.log('edit');
         setIsEditing(!isEditing);
         if (isEditing) {
             editBox.current.focus();
@@ -50,10 +54,9 @@ export default function Profile() {
     }
 
     async function handleEditSave() {
-        console.log('save');
         setIsEditing(!isEditing);
         // make req to save new description!
-        const res = await fetch('/api/user', {
+        await fetch('/api/user', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,11 +66,62 @@ export default function Profile() {
                 about: desc
             })
         });
+        user.about = desc;
+        setUser(user);
+    }
+
+    const RequestPasswordReset = async () => {
+        setError('');
+        setSuccess('');
+        const confirmed = window.confirm('please confirm that you want to reset your password!');
+        if (!confirmed) {
+            return;
+        }
+        const res = await fetch('/api/reset', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
         const data = await res.json();
         console.log(data);
-        user.about = desc;
-        console.log(user);
-        setUser(user);
+        if (res.status  === 200) {
+            setSuccess(data.message);
+        } else {
+            setError(data.message);
+        }
+    }
+
+    const RequestAccountDelete = async () => {
+        setError('');
+        setSuccess('');
+        const password = window.prompt('Enter your password!');
+        const confirmed = window.confirm('please confirm that you want to delete your account! Once you said "yes", you can`t go back ☠️');
+        if (!confirmed) {
+            return;
+        }
+        const res = await fetch('/api/user', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                password
+            })
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+            alert('Your account has been deleted! Thankyou for being such a great user.');
+            await RemoveJwt();
+            history.push('/login');
+        } else {
+            setError(data.message);
+        }
+    }
+
+    const RemoveJwt = async () => {
+        await useReset();
     }
 
     if (isLoading) {
@@ -107,9 +161,11 @@ export default function Profile() {
                 </More>
             </Main>
             <Footer>
-                <Button>Reset Password</Button>
-                <Button>Delete Account </Button>
+                <Button onClick={RequestPasswordReset}>Reset Password</Button>
+                <Button onClick={RequestAccountDelete}>Delete Account </Button>
             </Footer>
+                {error ? <Error>{error}</Error> : null}
+                {success ? <Success>{success}</Success> : null}
         </ProfileWrapper>
     )
 }
@@ -228,9 +284,9 @@ const Footer = styled.div`
 `;
 
 const Button = styled.button`
-background-color: #995CE7;
-border-radius: 5px;
-width: max-content;
+    background-color: #995CE7;
+    border-radius: 5px;
+    width: max-content;
     border: none;
     color: #FFF;
 `;
@@ -259,6 +315,7 @@ const EditBtn = styled.img`
 const SaveBtn = styled.button`
     padding: 4px 10px;
     font-size: .8rem;
+    color: white;
     background-color: #0D7BC5;
     border-radius: 5px;
     border: none;
@@ -274,4 +331,16 @@ const Pre = styled.pre`
     & > div:focus {
         outline: 1px solid blue;
     }
+`;
+
+const Error  = styled.p`
+    text-align:center;
+    color: red;
+    padding: 1em 0;
+`;
+
+const Success = styled.p`
+    text-align: center;
+    color: green;
+    padding: 1em 0;
 `;

@@ -1,18 +1,24 @@
+const path = require('path');
 const express = require('express');
-const { requestReset, doReset } = require('../controllers/reset');
+const { requestReset, requestResetByToken, doReset } = require('../controllers/reset');
+const { isAuthenticated, isVerified } = require('../middlewares/auth');
 const router = express.Router();
+
+router.get('/', isAuthenticated, isVerified, async (req, res) => {
+    requestResetByToken(req, res);
+})
 
 router.post('/', async (req, res) => {
     requestReset(req, res);
 });
 
+
 router.post('/:t', async (req, res) => {
     doReset(req, res);
 });
 
-// TODO send password reset form using which user will make post request to /api/reset/:token with new password
 router.get('/:token', async (req, res) => {
-    res.send(`later`);
+    res.sendFile(path.join(__dirname + '/../staticPages/resetForm.html'));
 });
 
 module.exports = router;
