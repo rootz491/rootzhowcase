@@ -40,6 +40,6 @@ app.use('*', (req, res) => {
     // res.status(404).json({ message: 'Not Found' });
 })
 
-app.listen(1337, () => {
+app.listen(process.env.PORT || 1337, () => {
     console.log('Server running on port 1337');
 });
