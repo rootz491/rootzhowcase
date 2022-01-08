@@ -14,7 +14,7 @@ export default function Reset() {
         setLoading(true);
         setError('');
         setSuccess('');
-        const res = await fetch('/api/auth/reset', {
+        const res = await fetch('/api/reset', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -22,6 +22,7 @@ export default function Reset() {
             body: JSON.stringify({ email })
         })
         const data = await res.json();
+        console.log(data);
         if (res.status === 200) {
             setSuccess(data.message)
         }
@@ -40,7 +41,7 @@ export default function Reset() {
                     <Note>Enter the email address you used when you joined and we’ll send you instructions to reset your password.</Note>
                     <InputWrapper>
                         <label htmlFor='email'>Email Address</label>
-                        <Input type='text' name='email' id='email' value={email} onChange={e => setEmail(e.target.value)} />
+                        <Input type='email' name='email' id='email' value={email} onChange={e => setEmail(e.target.value)} />
                     </InputWrapper>
                     <InputWrapper>
                         <p>remembered password? <Link to="/login"><Login>login</Login></Link></p>

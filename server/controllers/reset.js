@@ -45,6 +45,7 @@ exports.requestResetByToken = async (req, res) => {
 exports.requestReset = async (req, res) => {
     const { email } = req.body;
     try {
+        console.log(email);
         // verify email field
         if (!email) {
             throw {
@@ -71,7 +72,7 @@ exports.requestReset = async (req, res) => {
         // send password reset email
         sendPasswordResetMail(user.email, user.passwordResetToken);
         // send response
-        res.status(200).json({msg: `password reset link has been sent to ${user.email}, please check your email asap!`});
+        res.status(200).json({message: `password reset link has been sent to ${user.email}, please check your email asap!`});
     } catch (error) {
         res.status(error.status).json({message: error.msg});
     }
